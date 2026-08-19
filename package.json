@@ -1,0 +1,26 @@
+{
+  "name": "sabiledger",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:push": "drizzle-kit push",
+    "record": "tsx src/cli/record.ts",
+    "fix": "tsx src/cli/fix.ts",
+    "summary": "tsx src/cli/summary.ts",
+    "webhook": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
+    "@libsql/client": "^0.14.0",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.44.6",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "drizzle-kit": "^0.31.5",
+    "tsx": "^4.19.4",
+    "typescript": "^5.9.3"
+  }
+}
