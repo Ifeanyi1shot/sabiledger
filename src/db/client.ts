@@ -1,10 +1,11 @@
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
-import { mkdirSync } from "node:fs";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 import * as schema from "./schema.js";
 
-mkdirSync("./data", { recursive: true });
+if (!process.env.DATABASE_URL) {
+  throw new Error("Missing required env var DATABASE_URL (Neon Postgres connection string)");
+}
 
-const client = createClient({ url: "file:./data/sabiledger.db" });
+const sql = neon(process.env.DATABASE_URL);
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(sql, { schema });

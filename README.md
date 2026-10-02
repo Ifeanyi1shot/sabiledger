@@ -1,17 +1,19 @@
 # SabiLedger — core loop (milestone 1)
 
 Mocked end-to-end slice of Flow A/C from the PRD: a transcribed voice note in,
-Claude parses it into a structured transaction, it's saved to a local ledger,
-and a plain-language reply comes back. No real WhatsApp or AP-partner
-integration yet — see `sabiledger-prd.md` for the full architecture.
+Claude parses it into a structured transaction, it's saved to a Postgres
+ledger, and a plain-language reply comes back — see `sabiledger-prd.md` for
+the full architecture.
 
 ## Setup
 
-```
-npm install
-cp .env.example .env   # then paste your ANTHROPIC_API_KEY
-npx drizzle-kit push   # creates ./data/sabiledger.db from src/db/schema.ts
-```
+1. Create a free [Neon](https://neon.tech/) Postgres project and copy its
+   connection string.
+2. ```
+   npm install
+   cp .env.example .env   # then paste your ANTHROPIC_API_KEY and DATABASE_URL
+   npx drizzle-kit push   # creates the tables in src/db/schema.ts on your Neon database
+   ```
 
 ## Usage
 
@@ -98,10 +100,3 @@ permanent token and a verified sending number are needed beyond local testing.
   webhook only handles WhatsApp `text` messages; voice notes are ignored.
 - **Compliance engine / e-invoicing**: not built — this slice only proves out
   transcript parsing and the ledger.
-- **Database**: SQLite via `@libsql/client` instead of Neon Postgres (the
-  PRD's stated choice), so this runs with zero external setup — `better-sqlite3`
-  needs a C++ build toolchain that isn't installed here. Moving to Postgres
-  later means switching `src/db/client.ts` to `drizzle-orm/neon-http` and
-  porting `src/db/schema.ts` from `drizzle-orm/sqlite-core` to `drizzle-orm/pg-core`
-  (column types differ, e.g. `real`/`timestamp_ms` vs Postgres `numeric`/`timestamp`)
-  — a real migration, not a one-line swap.
